@@ -1,4 +1,4 @@
-var cursor, chicken, clownFishGroup;
+var cursor, chicken, fishFoodGroup;
 
 var StateMain={    
     
@@ -23,29 +23,37 @@ var StateMain={
         chicken.scale.setTo(.2, .2);
         chicken.anchor.setTo(0.5, 0.5);
 
-        clownFishGroup = game.add.group();
-        clownFishGroup.scale.set(.05, .05);
-        clownFishGroup.setAll('anchor.x', 0.5);
-        clownFishGroup.setAll('anchor.y', 0.5);       
-        clownFishGroup.setAll('checkWorldBounds', true);   
-        clownFishGroup.setAll('outOfBoundsKill', true);
+        fishFoodGroup = game.add.group();
+        fishFoodGroup.scale.set(.05, .05);
+        fishFoodGroup.setAll('anchor.x', 0.5);
+        fishFoodGroup.setAll('anchor.y', 0.5);       
+        fishFoodGroup.setAll('checkWorldBounds', true);   
+        fishFoodGroup.setAll('outOfBoundsKill', true);
+        fishFoodGroup.enableBody = true;
 
-        clownFishGroup.create(30, 2230, 'clownfish');
-        clownFishGroup.create(8000, 3430, 'clownfish');
-        clownFishGroup.create(3000, 4630, 'clownfish');
-        game.physics.arcade.enable([chicken, clownFishGroup]);
+        game.physics.arcade.enable([chicken, fishFoodGroup]);
         chicken.body.collideWorldBounds = true;
         chicken.body.gravity.y = 5000;
         chicken.body.bounce.y = .3;
         chicken.body.bounce.x = .3;
-        clownFishGroup.setAll('body.velocity.x', 400);
-
+        fishFoodGroup.setAll('body.velocity.x', 400);
         cursor = game.input.keyboard.createCursorKeys();
+        
+        game.time.events.loop(Phaser.Timer.SECOND *1, this.createFish, this);
 
     },
 
     destroyFish: function(fish) {
         fish.kill();
+    },
+
+    createFish: function() {
+        console.log(game.rnd.integerInRange(1000, 6000));
+        console.log(game.rnd.integerInRange(1000, 6000));
+        var fish =  fishFoodGroup.create(game.rnd.integerInRange(1000, 6000),game.rnd.integerInRange(1000, 6000), 'clownfish');
+        fish.body.collideWorldBounds = true;
+        fish.body.velocity.x = 4000;
+
     },
     
     update:function()
