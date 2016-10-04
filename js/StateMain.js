@@ -1,4 +1,4 @@
-var cursor, chicken, fishFoodGroup;
+var cursor, chicken, fishFoodGroup, text;
 
 var StateMain={    
     
@@ -14,6 +14,7 @@ var StateMain={
         game.physics.startSystem(Phaser.Physics.ARCADE);
         if (screen.width>1500)
         {
+            var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
             game.world.setBounds(-20, 0, 680, 575);
         }
 
@@ -35,6 +36,8 @@ var StateMain={
         chicken.body.gravity.y = 5000;
         chicken.body.bounce.y = .3;
         chicken.body.bounce.x = .3;
+        chicken.body.immovable = true;
+
         cursor = game.input.keyboard.createCursorKeys();
         
         game.time.events.loop(Phaser.Timer.SECOND *1, this.createFish, this);
@@ -47,7 +50,7 @@ var StateMain={
 
     createFish: function() {
         var xPosition = 0;
-        var yPosition = game.rnd.integerInRange(100, 600);
+        var yPosition = game.rnd.integerInRange(100, 450);
         var fish =  fishFoodGroup.create(xPosition, yPosition, 'bluefish-h');
         fish.checkWorldBounds = true;
         fish.body.outOfBoundsKill = true;
@@ -62,6 +65,13 @@ var StateMain={
     update:function()
     {       
         this.controls();
+        game.physics.arcade.collide(chicken, fishFoodGroup, this.eatFish, null, this);
+
+    },
+
+    eatFish(chicken, fish) {
+        fish.kill();
+
     },
 
     controls: function() {
