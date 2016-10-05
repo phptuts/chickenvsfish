@@ -1,4 +1,4 @@
-var cursor, chicken, fishFoodGroup, text;
+var cursor, chicken, fishFoodGroup, scoreText, score = 0, animals = ['redfish', 'bluefish'], sharks;
 
 var StateMain={    
     
@@ -6,7 +6,9 @@ var StateMain={
     {
        game.load.image("background", "images/background.png");
        game.load.image("chicken", "images/chicken.png");
-       game.load.spritesheet("bluefish-h", "images/bluefish-h.png", 32, 20, 3);
+       game.load.spritesheet("bluefish", "images/bluefish-h.png", 32, 20, 3);
+       game.load.spritesheet("redfish", "images/redfish.png", 32, 20, 3);
+       game.load.image("shark", "images/shark.png");
     },
     
     create:function()
@@ -14,7 +16,6 @@ var StateMain={
         game.physics.startSystem(Phaser.Physics.ARCADE);
         if (screen.width>1500)
         {
-            var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
             game.world.setBounds(-20, 0, 680, 575);
         }
 
@@ -31,7 +32,15 @@ var StateMain={
         fishFoodGroup.setAll('outOfBoundsKill', true);
         fishFoodGroup.enableBody = true;
 
-        game.physics.arcade.enable([chicken, fishFoodGroup]);
+        sharks = game.add.group();
+        sharks.setAll('anchor.x', 0.5);
+        sharks.setAll('anchor.y', 0.5);       
+        sharks.setAll('checkWorldBounds', true);   
+        sharks.setAll('outOfBoundsKill', true);
+        sharks.enableBody = true;
+
+
+        game.physics.arcade.enable([chicken, fishFoodGroup, shark]);
         chicken.body.collideWorldBounds = true;
         chicken.body.gravity.y = 5000;
         chicken.body.bounce.y = .3;
@@ -40,25 +49,43 @@ var StateMain={
 
         cursor = game.input.keyboard.createCursorKeys();
         
-        game.time.events.loop(Phaser.Timer.SECOND *1, this.createFish, this);
+        var style = { font: "bold 32px Arial", fill: "orange", boundsAlignH: "center", boundsAlignV: "middle" };
+        var scoreTextLabel = game.add.text(game.world.centerX, game.world.centerY -260, "Score", style);
+        scoreTextLabel.anchor.setTo(.5, .5);
+        scoreText = game.add.text(game.world.centerX , game.world.centerY - 215, "0", style);
+        scoreText.anchor.setTo(.5, .5);
+
+        this.loops();
 
     },
 
-    destroyFish: function(fish) {
-        fish.kill();
+    loops: function() {
+        game.time.events.loop(Phaser.Timer.SECOND *1, this.createFish, this);
+        game.time.events.loop(Phaser.Timer.SECOND *5, this.createShark, this);
+    },
+
+    createShark: function() {
+        var xPosition = 0;
+        var yPosition = game.rnd.integerInRange(100, 450);
+        var fish =  fishFoodGroup.create(xPosition, yPosition, animalName);
+        fish.checkWorldBounds = true;
+        fish.body.outOfBoundsKill = true;
+        fish.body.enableBody = true;
+
     },
 
     createFish: function() {
+        
+        var animalName = animals[game.rnd.integerInRange(0, animals.length -1)];
         var xPosition = 0;
         var yPosition = game.rnd.integerInRange(100, 450);
-        var fish =  fishFoodGroup.create(xPosition, yPosition, 'bluefish-h');
+        var fish =  fishFoodGroup.create(xPosition, yPosition, animalName);
         fish.checkWorldBounds = true;
         fish.body.outOfBoundsKill = true;
         fish.body.enableBody = true;
         fish.animations.add('swim');
         fish.animations.play('swim', 6, true);
         fish.body.velocity.x = 20;
-        fish.scale.x = -1;
 
     },
     
@@ -66,11 +93,15 @@ var StateMain={
     {       
         this.controls();
         game.physics.arcade.collide(chicken, fishFoodGroup, this.eatFish, null, this);
+        game.physics.arcade.collide(chicken, sharks, this.eatFish, null, this);
 
     },
 
     eatFish(chicken, fish) {
         fish.kill();
+        score += 1;
+        scoreText.setText(score);
+        console.log(score);
 
     },
 
