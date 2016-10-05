@@ -40,7 +40,7 @@ var StateMain={
         sharks.enableBody = true;
 
 
-        game.physics.arcade.enable([chicken, fishFoodGroup, shark]);
+        game.physics.arcade.enable([chicken, fishFoodGroup, sharks]);
         chicken.body.collideWorldBounds = true;
         chicken.body.gravity.y = 5000;
         chicken.body.bounce.y = .3;
