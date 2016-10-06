@@ -16,15 +16,15 @@ var StateMain={
         game.physics.startSystem(Phaser.Physics.ARCADE);
         if (screen.width>1500)
         {
-            game.world.setBounds(-20, 0, 680, 575);
+            game.world.setBounds(-20, 0, 680, 475);
         }
 
         var background = game.add.image(0, 0, "background");
         
         chicken = game.add.sprite(100, 100, "chicken");
-        chicken.scale.setTo(.2, .2);
+        chicken.scale.setTo(.1, .1);
         chicken.anchor.setTo(0.5, 0.5);
-
+        
         fishFoodGroup = game.add.group();
         fishFoodGroup.setAll('anchor.x', 0.5);
         fishFoodGroup.setAll('anchor.y', 0.5);       
@@ -67,11 +67,12 @@ var StateMain={
     createShark: function() {
         var xPosition = 0;
         var yPosition = game.rnd.integerInRange(100, 450);
-        var fish =  fishFoodGroup.create(xPosition, yPosition, animalName);
-        fish.checkWorldBounds = true;
-        fish.body.outOfBoundsKill = true;
-        fish.body.enableBody = true;
-
+        var shark =  sharks.create(xPosition, yPosition, 'shark');
+        shark.checkWorldBounds = true;
+        shark.body.outOfBoundsKill = true;
+        shark.body.enableBody = true;
+        shark.body.velocity.x = 90;
+        shark.scale.setTo(-.3, .3);
     },
 
     createFish: function() {
@@ -93,7 +94,7 @@ var StateMain={
     {       
         this.controls();
         game.physics.arcade.collide(chicken, fishFoodGroup, this.eatFish, null, this);
-        game.physics.arcade.collide(chicken, sharks, this.eatFish, null, this);
+        game.physics.arcade.collide(chicken, sharks, this.loseGame, null, this);
 
     },
 
@@ -101,8 +102,12 @@ var StateMain={
         fish.kill();
         score += 1;
         scoreText.setText(score);
-        console.log(score);
+    },
 
+    loseGame: function(chicken, shark) {
+        alert("You lost game!");
+        game.state.start("StateMain");
+        score = 0;
     },
 
     controls: function() {
@@ -117,12 +122,12 @@ var StateMain={
        
         if (cursor.right.isDown) {
             chicken.body.velocity.x = 400; 
-            chicken.scale.setTo(.2, .2);           
+            chicken.scale.setTo(.1, .1);           
         }
 
         if (cursor.left.isDown) {
             chicken.body.velocity.x = -400;
-            chicken.scale.setTo(-.2, .2);
+            chicken.scale.setTo(-.1, .1);
         }
     }    
     
