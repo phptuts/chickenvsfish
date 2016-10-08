@@ -4,11 +4,11 @@ var StateMain={
     
    preload:function()
     {
-       game.load.image("background", "images/background2.png");
+       game.load.image("background", "images/background.png");
        game.load.image("chicken", "images/chicken.png");
        game.load.spritesheet("bluefish", "images/bluefish.png", 32, 20, 3);
-       game.load.spritesheet("redfish", "images/redfish.png", 32, 20, 3);
-       game.load.spritesheet("colorfish", "images/colorfish.png", 32, 23, 3);
+       game.load.spritesheet("redfish", "images/redfish.png", 31, 18, 3);
+       game.load.spritesheet("colorfish", "images/colorfish.png", 31, 23, 3);
        game.load.spritesheet("snake", "images/snake.png", 32, 17, 3);
        game.load.image("shark", "images/shark.png");
     },
@@ -49,10 +49,10 @@ var StateMain={
 
         cursor = game.input.keyboard.createCursorKeys();
         
-        var style = { font: "bold 32px Arial", fill: "orange", boundsAlignH: "center", boundsAlignV: "middle" };
-        var scoreTextLabel = game.add.text(game.world.centerX, game.world.centerY -215, "Score", style);
+        var style = { font: "bold 42px Pacifico", fill: "orange", boundsAlignH: "center", boundsAlignV: "middle" };
+        var scoreTextLabel = game.add.text(game.world.centerX, game.world.centerY -175, "Score", style);
         scoreTextLabel.anchor.setTo(.5, .5);
-        scoreText = game.add.text(game.world.centerX , game.world.centerY - 175, "0", style);
+        scoreText = game.add.text(game.world.centerX , game.world.centerY - 135, "0", style);
         scoreText.anchor.setTo(.5, .5);
 
         this.loops();
@@ -125,7 +125,7 @@ var StateMain={
 
     loseGame: function(chicken, badGuy) {
         alert("You lost game!");
-        game.state.start("StateMain");
+        game.state.start("StateTitle");
         score = 0;
     },
 
