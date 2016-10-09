@@ -45,6 +45,11 @@ var StateTitle={
         start.anchor.setTo(.5, .5);
         start.inputEnabled = true;
         start.events.onInputDown.add(this.startGame, this);
+        
+        if (oldScore > 0) {
+            var oldScore = game.add.text(game.world.centerX, game.world.centerY -75, "Latest Score: " + oldScore, style);
+            title.anchor.setTo(.5, .5);
+        }
     },
 
     startGame: function() {

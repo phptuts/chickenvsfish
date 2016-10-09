@@ -1,4 +1,4 @@
-var game;
+var game, oldScore = 0;
 
 window.onload = function()
 {
