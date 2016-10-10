@@ -1,5 +1,5 @@
 var cursor, chicken, fishFoodGroup, scoreText, score = 0, badGuys, badGuyNames = ['shark', 'snake'], animals = ['redfish', 'bluefish', 'colorfish'];
-var chickenSound, eatingSound;
+var chickenSound, eatingSound, chickenSoundMarker;
 var StateMain={    
     
    preload:function()
@@ -22,8 +22,10 @@ var StateMain={
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
         chickenSound = game.add.audio('chickenSound');
+        chickenSound.volume = .1;
+        chickenSound.addMarker('chickenSoundMarker', 1, 2);
         eatingSound = game.add.audio('eatingSound');
-
+        eatingSound.volume = .1;
 
         var background = game.add.image(0, 0, "background");
         background.height = game.height;
@@ -132,8 +134,9 @@ var StateMain={
     },
 
     loseGame: function(chicken, badGuy) {
-        chickenSound.play();
+        chickenSound.play('chickenSoundMarker');
         game.state.start("StateTitle");
+        oldScore = score;
         score = 0;
     },
 

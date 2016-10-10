@@ -11,7 +11,7 @@ WebFontConfig = {
     }
 
 };
-var start;
+var start, oldScore = -1, enterKey;
 var StateTitle={    
     
    preload:function()
@@ -26,12 +26,19 @@ var StateTitle={
         var background = game.add.image(0, 0, "background");
         background.height = game.height;
         background.width = game.width;
-        
+        enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+
     },
     
     update:function()
     {       
-        
+        if (enterKey.isDown) {
+            game.state.start("StateMain");
+        }
+    },
+
+    oldScore: function() {
+        return oldScore;
     },
 
     createText: function() 
@@ -45,10 +52,11 @@ var StateTitle={
         start.anchor.setTo(.5, .5);
         start.inputEnabled = true;
         start.events.onInputDown.add(this.startGame, this);
-        
-        if (oldScore > 0) {
-            var oldScore = game.add.text(game.world.centerX, game.world.centerY -75, "Latest Score: " + oldScore, style);
-            title.anchor.setTo(.5, .5);
+        console.log(this.oldScore());
+        if (this.oldScore() >= 0) {
+            var oldScoreText = game.add.text(game.world.centerX, game.world.centerY+75, "Latest Score: " + this.oldScore(), style);
+            oldScoreText.fontSize = 30;
+            oldScoreText.anchor.setTo(.5, .5);
         }
     },
 
