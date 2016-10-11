@@ -54,7 +54,7 @@ var StateTitle={
         start.events.onInputDown.add(this.startGame, this);
         console.log(this.oldScore());
         if (this.oldScore() >= 0) {
-            var oldScoreText = game.add.text(game.world.centerX, game.world.centerY+75, "You at  " + this.oldScore() + " fish!", style);
+            var oldScoreText = game.add.text(game.world.centerX, game.world.centerY+75, "You ate " + this.oldScore() + " fish!", style);
             oldScoreText.fontSize = 30;
             oldScoreText.anchor.setTo(.5, .5);
         }
